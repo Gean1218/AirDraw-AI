@@ -1,19 +1,24 @@
+import sys
+import json
 import cv2
 from datetime import datetime
-import mediapipe as mp
 
-mp_hands = mp.solutions.hands
-
-hands = mp_hands.Hands(
-    static_image_mode=True,
-    max_num_hands=1,
-    min_detection_confidence=0.5
-)
-
-mp_drawing = mp.solutions.drawing_utils
+# Tentar importar MediaPipe (compatível com versão nova e velha)
+try:
+    import mediapipe as mp
+    mp_hands = mp.solutions.hands
+    hands = mp_hands.Hands(
+        static_image_mode=True,
+        max_num_hands=1,
+        min_detection_confidence=0.5
+    )
+except AttributeError:
+    print("Erro: MediaPipe não configurado corretamente. Execute: pip install --upgrade mediapipe")
+    sys.exit(1)
 
 
 def detecta_gesto(caminho_imagem):
+    """Detecta gesto de mão em uma imagem"""
 
     imagem = cv2.imread(caminho_imagem)
 
@@ -42,5 +47,22 @@ def detecta_gesto(caminho_imagem):
     }
 
 
-resultado = detecta_gesto(r"C:\Temp\frame_atual.jpg")
-print(resultado)
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("Erro: Forneça o caminho da imagem")
+        print("Uso: python gesture_detector.py <caminho_imagem>")
+        sys.exit(1)
+
+    caminho_imagem = sys.argv[1]
+    resultado = detecta_gesto(caminho_imagem)
+
+    # Salvar em JSON
+    caminho_resultado = "C:\\Temp\\gesto_resultado.json"
+    try:
+        with open(caminho_resultado, 'w') as f:
+            json.dump(resultado, f, indent=2)
+        print(f"Gesto detectado: {resultado['gesto']}")
+        print(f"Resultado salvo em: {caminho_resultado}")
+    except Exception as e:
+        print(f"Erro ao salvar JSON: {e}")
+        sys.exit(1)
