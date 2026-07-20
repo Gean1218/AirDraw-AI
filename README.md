@@ -103,15 +103,7 @@ mvn javafx:run
 4. **Escrita automática** no canvas
 5. **Testes e validação**
 
-## 👨‍💻 Autor
 
-Desenvolvido como projeto de aprendizado em visão computacional e JavaFX.
-
-## 📝 Licença
-
-Este projeto é de código aberto para fins educacionais.
-
----
 
 **Status:** 🟡 Beta Incompleta - Em desenvolvimento ativo
 
